@@ -8,7 +8,7 @@ import django_jalali.admin as jadmin
 class PostAdmin(admin.ModelAdmin):
     list_display = [ 'title' , 'author' , 'publish' , 'status' ]
     ordering = ['title' , 'publish']
-    list_filter = ['status' , 'author' , ('publish' , JDateFieldListFilter)]
+    list_filter = ['status' , 'author' , 'publish' ]
     search_fields = ['title' , 'description']
     raw_id_fields = ['author']
     date_hierarchy = 'publish'

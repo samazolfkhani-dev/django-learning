@@ -3,7 +3,7 @@
 {% block content %}
     {% for post in posts %}
         <h2>
-            <a href="{{post.get_absolute_url}}">{{ post}}</a>
+            <a href="{{ post.get_absolute_url }}">{{ post}}</a>
         </h2>
         <p>{{post.description | truncatewords:4}}</p>
         <hr>
