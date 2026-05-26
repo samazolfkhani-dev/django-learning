@@ -46,3 +46,16 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:post_detail' , args=[self.id])
+
+class Ticket(models.Model):
+    message = models.TextField(verbose_name='Message')
+    name = models.TextField(verbose_name='Name' , max_length=250)
+    email = models.EmailField(verbose_name='Email')
+    phone = models.TextField(verbose_name='Phone')
+    subject = models.TextField(verbose_name='Subject')
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.subject

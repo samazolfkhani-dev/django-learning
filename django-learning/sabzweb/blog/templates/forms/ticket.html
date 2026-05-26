@@ -1,0 +1,49 @@
+{% extends 'parent/base.html' %}
+{% block title %}Ticket{% endblock%}
+{% block content %}
+    <form method="post">
+        Name :
+        <input type="text" name="name" required {% if form.name.value %} value="{{ form.name.value }}" {% endif %}>
+        <br>
+        Email :
+        <input type="email" name="email" {% if form.email.value %} value="{{ form.email.value}}" {% endif %}>
+        <br>
+        Phone :
+        <input type="text" name="phon" required maxlength="11"  {% if form.phone.value %} value="{{ form.phone.value}}" {% endif %}>
+        <br>
+        Message :
+        <textarea name="message">
+             {% if form.message.value %} {{ form.message.value}} {% endif %}
+        </textarea>
+        <br>
+        <select name="subject">
+            {% if form.subject.value == "suggest" %}
+                <option value="suggest" selected>Suggests</option>
+            {% else %}
+                <option value="suggest">Suggests</option>
+            {% endif %}
+
+            {% if form.subject.value == "feedback" %}
+                <option value="feedback" selected>Feedback</option>
+            {% else %}
+                <option value="feedback">Feedback</option>
+            {% endif %}
+
+            {% if form.subject.value == "report" %}
+                <option value="report" selected>Report</option>
+            {% else %}
+                <option value="report">Report</option>
+            {% endif %}
+</select>
+    <input type="submit" value="Submit">
+    </form>
+
+    {% if form.errors %}
+    <br>
+        {% for field in form %}
+            {% for errors in field %}
+                {{ field.label }} : {{ errors }}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
