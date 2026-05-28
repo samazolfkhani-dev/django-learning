@@ -1,4 +1,5 @@
 from django import forms
+from .models import Comment
 
 class TicketForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea , required=True)
@@ -14,3 +15,14 @@ class TicketForm(forms.Form):
                 raise forms.ValidationError('Phone number must be number')
             else :
                 return phone
+
+class CommentForm(forms.ModelForm):
+    def clean_name(self):
+        name = self.cleaned_data['name']
+        if name :
+            if len(name) < 3 :
+                raise forms.validationError("Name must be at least 3 characters")
+            return name
+    class Meta :
+        model = Comment
+        fields = ['name' , 'body']

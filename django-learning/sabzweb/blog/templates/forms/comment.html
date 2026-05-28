@@ -1,0 +1,14 @@
+{% extends 'parent\base.html' %}
+{% block title %}post comments{% endblock %}
+{% load jformat %}
+
+{% block content %}
+    {% if comment %}
+        <a href="{{ post.get_absolute_url }}">Back To The Post</a>
+    {% endif %}
+    <form method="post" action="{% url 'blog:post_comment' post.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add Comment">
+    </form>
+{% endblock %}

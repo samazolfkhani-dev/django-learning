@@ -19,3 +19,10 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ['subject' , 'name' , 'phone']
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin) :
+    list_display = ['post' , 'name' , 'created' , 'active']
+    list_filter = ['created' , 'active' , 'updated']
+    serach_fields = ['name' , 'body']
+    list_editable = [ 'active']

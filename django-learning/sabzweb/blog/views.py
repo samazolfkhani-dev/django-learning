@@ -1,9 +1,12 @@
 from django.shortcuts import render , get_object_or_404 , redirect
 from django.http import HttpResponse ,Http404
 from .models import *
-from .forms import TicketForm
+from .forms import TicketForm, CommentForm
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from django.views.generic import ListView , DetailView
+from django.views.decorators.http import require_POST
+
+
 # Create your views here.
 
 def index(request):
@@ -30,16 +33,20 @@ class PostListView(ListView):
     paginate_by = 2
     context_object_name = 'posts'
 
-# def post_detail(request , id):
-#     post = get_object_or_404(Post , id = id , status = Post.Status.PUBLISHED)
-#     context = {
-#         'post' : post,
-#     }
-#     return render(request , 'blog/detail.html' , context)
+def post_detail(request , id):
+    post = get_object_or_404(Post , id = id , status = Post.Status.PUBLISHED)
+    comments = post.comments.filter(active = True)
+    form = CommentForm()
+    context = {
+        'post' : post,
+        'comments' : comments,
+        'form' : form,
+    }
+    return render(request , 'blog/detail.html' , context)
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'blog/detail.html'
+# class PostDetailView(DetailView):
+#     model = Post
+#     template_name = 'blog/detail.html'
 
 
 def ticket(request):
@@ -53,3 +60,22 @@ def ticket(request):
     else:
         form = TicketForm()
         return render(request, 'forms/ticket.html', {'form':form})
+
+
+
+@require_POST
+def post_comment(request , id):
+    post = get_object_or_404(Post , id = id , status = Post.Status.PUBLISHED)
+    comment = None
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit = False)
+        comment.post = post
+        comment.save()
+    context = {
+        'post':post ,
+        'comment':comment,
+        'form':form,
+    }
+    print(form.errors)
+    return render(request , 'forms/comment.html' , context)

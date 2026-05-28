@@ -59,3 +59,23 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.subject
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="comments" , verbose_name="post")
+    name = models.CharField(verbose_name="name" , max_length=250)
+    body = models.TextField(verbose_name="message")
+    created = jmodels.jDateTimeField(auto_now_add=True)
+    updated = jmodels.jDateTimeField(auto_now=True)
+    active = models.BooleanField(default=False)
+
+    class Meta :
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['-created'])
+        ]
+        verbose_name = "comment"
+        verbose_name_plural = "comments"
+
+    def __str__(self):
+        return f"{self.name} : {self.post}"
