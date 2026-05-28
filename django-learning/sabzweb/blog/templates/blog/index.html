@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'parent/base.html' %}
+{% load blog_tags %}
+{% block title %}Post Lists{% endblock%}
+{% block content %}
+    <h2> Site Statics</h2>
+    <p> Comment Count : {% total_comment %}</p>
+    <p> Post Count : {% total_post %}</p>
+    <p> Last Post Date : {% last_post %}</p>
+{% endblock %}
