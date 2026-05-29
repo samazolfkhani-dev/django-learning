@@ -4,7 +4,7 @@ from ..models import Post , Comment
 register = template.Library()
 
 @register.simple_tag
-def total_post ():
+def total_comment ():
     return Post.published.count()
 
 @register.simple_tag
@@ -12,7 +12,7 @@ def total_comment():
     return Comment.objects.filter(active=True).count()
 
 @register.simple_tag
-def last_post():
+def last_post_date():
     return Post.published.last().publish
 
 @register.inclusion_tag('partials/last_posts.html')

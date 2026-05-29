@@ -1,11 +1,11 @@
 {% extends 'parent/base.html' %}
 {% load blog_tags %}
-{% block title %}Post Lists{% endblock%}
+{% block title %} Index {% endblock %}
 {% block content %}
-    <h2> Site Statics</h2>
-    <p> Comment Count : {% total_comment %}</p>
-    <p> Post Count : {% total_post %}</p>
-    <p> Last Post Date : {% last_post %}</p>
-
+    <h2>Site Statics</h2>
+    <p>Total Comment : {% total_comment %}</p>
+    <p>Total Posts : {% total_comment %}</p>
+    <p>Last Post Date : {% last_post_date %}</p>
+    <br>
     {% last_posts 3 %}
 {% endblock %}
