@@ -1,32 +1,42 @@
-{% extends 'parent\base.html' %}
-{% block title %}post detail{% endblock %}
-{% load jformat %}
+{% extends 'parent/base.html' %}
+{% block title %}Post Detail{% endblock %}
 
 {% block content %}
-    <h1>post detail</h1>
-    <h2>{{post.title}} (by {{post.author}})</h2>
-    <p>{{post.description | linebreaks}}</p>
+{% load jformat %}
+    <h1>{{post.title}}</h1>
+    <h2>
+        Author : {{ post.author }}
+        <br>
+        Published Date : {{ post.publish | jformat:"%Y/%m/%d %H:%M"}}
+    </h2>
     <hr>
-    <p>{{ post.publish | jformat:"%Y/%m/%d  %H:%M"}}</p>
+    <p> {{ post.description | linebreaks }}</p>
     <br>
     <div>
-        {% with comment_count as cm_count %}
-            {{ cm_count }} comment {{ cm_count|pluralize }}
+        {% with comments|length as cm_count %}
+            Comment Count : {{ cm_count }} comment {{ cm_count | pluralize}}
         {% endwith %}
     </div>
 
+    <br>
+
     <div>
+        <p>Comment List : </p>
         {% for cm in comments %}
-            {{ cm.body|linebreaks }}
-            {{ cm.name }}
+            {{ cm.name }} :
+            {{ cm.body | linebreaks}}
+            <br>
         {% empty %}
-            no comment!
+            no comments!
         {% endfor %}
     </div>
+
     <br>
+
     <form method="post" action="{% url 'blog:post_comment' post.id %}">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Add Comment">
+        <input type="submit" value="Submit">
     </form>
 {% endblock %}
+
