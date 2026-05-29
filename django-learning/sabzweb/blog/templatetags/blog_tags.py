@@ -14,3 +14,11 @@ def total_comment():
 @register.simple_tag
 def last_post():
     return Post.published.last().publish
+
+@register.inclusion_tag('partials/last_posts.html')
+def last_posts(count=4):
+    l_posts = Post.published.order_by('-publish')[:count]
+    context = {
+        'l_posts': l_posts
+    }
+    return context
