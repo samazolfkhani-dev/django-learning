@@ -8,4 +8,11 @@
     <p>Last Post Date : {% last_post_date %}</p>
     <br>
     {% last_posts 3 %}
+    <br>
+    <h2>Popular Posts</h2>
+    {% popular_posts 3 as pp %}
+    {% for post in pp %}
+        <a href="{{ post.get_absolute_url }}">{{ post.title }} : {{ post.comment_count }} comment</a>
+    <br>
+    {% endfor %}
 {% endblock %}

@@ -31,6 +31,8 @@ class Post(models.Model):
     #choice field
     status = models.CharField(max_length=2 , choices=Status.choices, default=Status.DRAFT)
 
+    reading_time = models.PositiveIntegerField()
+
     #Managers
     objects = jmodels.jManager()
     published = PublishedManager()

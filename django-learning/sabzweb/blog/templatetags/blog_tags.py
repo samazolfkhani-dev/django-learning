@@ -1,6 +1,6 @@
 from django import template
 from ..models import Post , Comment
-
+from django.db.models import Count
 register = template.Library()
 
 @register.simple_tag
@@ -22,3 +22,7 @@ def last_posts(count=4):
         'l_posts': l_posts
     }
     return context
+
+@register.simple_tag
+def popular_posts(count=4):
+    return Post.published.annotate(comment_count=Count('comments')).order_by('-comment_count')[:count]
