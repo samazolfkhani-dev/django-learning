@@ -77,5 +77,4 @@ def post_comment(request , id):
         'comment':comment,
         'form':form,
     }
-    print(form.errors)
     return render(request , 'forms/comment.html' , context)
