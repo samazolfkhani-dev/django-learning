@@ -7,7 +7,7 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 
 @register.simple_tag
-def total_comment ():
+def total_post ():
     return Post.published.count()
 
 @register.simple_tag
