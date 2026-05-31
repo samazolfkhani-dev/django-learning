@@ -1,6 +1,9 @@
 from django import template
 from ..models import Post , Comment
 from django.db.models import Count
+from markdown import markdown
+from django.utils.safestring import mark_safe
+
 register = template.Library()
 
 @register.simple_tag
@@ -26,3 +29,7 @@ def last_posts(count=4):
 @register.simple_tag
 def popular_posts(count=4):
     return Post.published.annotate(comment_count=Count('comments')).order_by('-comment_count')[:count]
+
+@register.filter(name='markdown')
+def to_markdown(text):
+    return mark_safe(markdown(text))

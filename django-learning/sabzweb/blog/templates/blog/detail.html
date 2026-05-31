@@ -1,6 +1,6 @@
 {% extends 'parent/base.html' %}
 {% block title %}Post Detail{% endblock %}
-
+{% load blog_tags %}
 {% block content %}
 {% load jformat %}
     <h1>{{post.title}}</h1>
@@ -10,7 +10,7 @@
         Published Date : {{ post.publish | jformat:"%Y/%m/%d %H:%M"}}
     </h2>
     <hr>
-    <p> {{ post.description | linebreaks }}</p>
+    <p> {{ post.description | markdown }}</p>
     <br>
     <div>
         {% with comments|length as cm_count %}
