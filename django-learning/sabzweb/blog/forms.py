@@ -20,8 +20,19 @@ class CommentForm(forms.ModelForm):
         name = self.cleaned_data['name']
         if name:
             if not len(name) > 3 :
-                return forms.ValidationError("Name must have at least 3 letters!")
+                raise forms.ValidationError("Name must have at least 3 letters!")
         return name
+
+    def clean_body(self):
+        body = self.cleaned_data['body']
+        if body :
+            if not len(body) > 2 :
+                raise forms.ValidationError("Comment must have at least 2 letters!")
+            return body
     class Meta :
         model = Comment
         fields = ['name' , 'body']
+        widgets = {
+            'name' : forms.TextInput(attrs={'placeholder' : 'Enter Your Name :' , 'required' : True , 'class' : 'name'}) ,
+            'body' : forms.Textarea(attrs={'placeholder' : 'Enter Your Comment :' , 'class' : 'comment_body'})
+        }

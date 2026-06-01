@@ -112,3 +112,12 @@ h3::before {
 .author{
     text_align: center;
 }
+
+.name{
+    border-radius : 40%;
+    height : 30px;
+}
+
+.comment_body{
+    height : 300px;
+}
