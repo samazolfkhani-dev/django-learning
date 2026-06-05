@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment
+from .models import Comment , Post
 
 class TicketForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea , required=True)
@@ -36,3 +36,9 @@ class CommentForm(forms.ModelForm):
             'name' : forms.TextInput(attrs={'placeholder' : 'Enter Your Name :' , 'required' : True , 'class' : 'name'}) ,
             'body' : forms.Textarea(attrs={'placeholder' : 'Enter Your Comment :' , 'class' : 'comment_body'})
         }
+
+
+class PostForm(forms.ModelForm):
+    class Meta :
+        model = Post
+        fields = ['author' , 'title' , 'description' , 'reading_time']
