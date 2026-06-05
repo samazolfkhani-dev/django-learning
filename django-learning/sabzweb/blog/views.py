@@ -90,7 +90,7 @@ def post_form(request):
             post = form.save(commit=False)
             post.author = author
             post.save()
-        return redirect('blog:index')
+            return redirect('blog:index')
     else :
         form = PostForm()
     return render(request, 'forms/post_form.html', {'form': form})

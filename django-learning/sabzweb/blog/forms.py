@@ -39,6 +39,13 @@ class CommentForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if title:
+            if not len(title) > 3 :
+                raise forms.ValidationError("Title must have at least 3 letters!")
+            return title
+
     class Meta :
         model = Post
         fields = ['author' , 'title' , 'description' , 'reading_time']

@@ -39,7 +39,7 @@
             {% endif %}
         </select>
 
-        {% if form.erros %}
+        {% if form.errors %}
             {% for field in form %}
                 {% for error in field.errors %}
                     {{ field.label }} : {{ error }}

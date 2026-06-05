@@ -1,4 +1,6 @@
 from django import template
+from django.db.models.aggregates import Min
+
 from ..models import Post , Comment
 from django.db.models import Count
 from markdown import markdown
@@ -33,3 +35,11 @@ def popular_posts(count=4):
 @register.filter(name='markdown')
 def to_markdown(text):
     return mark_safe(markdown(text))
+
+@register.simple_tag
+def max_read_time() :
+    return Post.published.order_by('-reading_time')[0]
+
+@register.simple_tag
+def min_read_time() :
+    return Post.published.order_by('reading_time')[0]

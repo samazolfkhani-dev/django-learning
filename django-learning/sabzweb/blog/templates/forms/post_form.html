@@ -12,4 +12,13 @@
         {{ form.as_p }}
         <input type="submit" value="Create Post">
     </form>
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                {{ field.label }} : {{ error }}
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}

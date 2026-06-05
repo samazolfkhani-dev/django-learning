@@ -15,4 +15,18 @@
         <a href="{{ post.get_absolute_url }}">{{ post.title }} : {{ post.comment_count }} comment</a>
     <br>
     {% endfor %}
+    <br>
+
+    <h4>Maximum Reading Time :</h4>
+    <p>
+        {% max_read_time as long_post %}
+        <a href="{{ long_post.get_absolute_url }}">{{ long_post }} : {{ long_post.reading_time }}</a>
+    </p>
+
+    <h4>Minimum Reading Time :</h4>
+    <p>
+        {% min_read_time as short_post %}
+        <a href="{{ short_post.get_absolute_url }}">{{ short_post }} : {{ short_post.reading_time }}</a>
+    </p>
+
 {% endblock %}
