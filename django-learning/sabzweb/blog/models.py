@@ -25,16 +25,16 @@ class Post(models.Model):
     description = models.TextField()
     slug = models.SlugField(max_length=250)
     #date
-    publish = jmodels.jDateTimeField(default=timezone.now)
-    created = jmodels.jDateTimeField(auto_now_add=True)
-    updated = jmodels.jDateTimeField(auto_now=True)
+    publish = models.DateTimeField(default=timezone.now)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     #choice field
     status = models.CharField(max_length=2 , choices=Status.choices, default=Status.DRAFT)
 
     reading_time = models.PositiveIntegerField()
 
     #Managers
-    objects = jmodels.jManager()
+    objects = models.Manager()
     published = PublishedManager()
 
     class Meta:
@@ -67,8 +67,8 @@ class Comment(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="comments" , verbose_name="post")
     name = models.CharField(verbose_name="name" , max_length=250)
     body = models.TextField(verbose_name="message")
-    created = jmodels.jDateTimeField(auto_now_add=True)
-    updated = jmodels.jDateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=False)
 
     class Meta :
