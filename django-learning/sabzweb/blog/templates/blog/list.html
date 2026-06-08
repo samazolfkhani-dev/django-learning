@@ -1,6 +1,7 @@
 {% extends 'parent/base.html' %}
 {% block title %}Post Lists{% endblock %}
 {% block content %}
+    {% include 'partials/header.html' %}
     <h1> Post List </h1>
 <ol style="--length: {{ posts|length }};" role="list">
     {% for post in posts %}

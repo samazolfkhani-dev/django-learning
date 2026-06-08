@@ -3,6 +3,7 @@
 {% load blog_tags %}
 {% block content %}
 {% load jformat %}
+    {% include 'partials/header.html' %}
     <h1>{{post.title}}</h1>
     <h2>
         Author : {{ post.author }}

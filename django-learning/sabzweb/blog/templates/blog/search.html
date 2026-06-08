@@ -1,0 +1,17 @@
+{% extends 'parent/base.html' %}
+{% block title %}Post Search{% endblock %}
+{% load blog_tags %}
+{% block content %}
+    {% include 'partials/header.html' %}
+    {% if query %}
+        <h2>Results For {{ query }} : {{ result.count }}</h2>
+    {% endif %}
+    <br>
+    {% for post in result %}
+        <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+        <p>{{ post.description | markdown | truncatewords:5}}</p>
+        <br>
+    {% empty %}
+        <p>No Result!</p>
+    {% endfor %}
+{% endblock %}

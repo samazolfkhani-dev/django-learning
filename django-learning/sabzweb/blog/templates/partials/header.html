@@ -1,1 +1,5 @@
-<p>header</p>
+<form method="Get" action="{% url 'blog:post_search' %}">
+    {% csrf_token %}
+    <input type="text" name="query" required placeholder="enter your search: ">
+    <input type="submit" name="search">
+</form>
