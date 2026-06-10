@@ -2,6 +2,7 @@
 {% load blog_tags %}
 {% block title %} Index {% endblock %}
 {% block content %}
+    {% include 'partials/header.html' %}
     <h2>Site Statics</h2>
     <p>Total Comment : {% total_comment %}</p>
     <p>Total Posts : {% total_post %}</p>
