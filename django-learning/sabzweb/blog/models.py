@@ -37,6 +37,10 @@ class Post(models.Model):
     objects = models.Manager()
     published = PublishedManager()
 
+    def save(self , *args , **kwargs):
+        self.description = censor_text(self.description)
+        super().save(*args , **kwargs)
+
     class Meta:
         ordering = ['-publish']
         indexes = [
@@ -56,12 +60,21 @@ class Ticket(models.Model):
     phone = models.TextField(verbose_name='Phone')
     subject = models.TextField(verbose_name='Subject')
 
+    def save(self , *args , **kwargs):
+        self.message = censor_text(self.message)
+        super().save(*args , **kwargs)
+
     class Meta:
         ordering = ['name']
 
     def __str__(self):
         return self.subject
 
+def censor_text(text):
+    bad_words = ["loser"]
+    for word in bad_words:
+        text = text.replace(word , "*" * len(word))
+    return text
 
 class Comment(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="comments" , verbose_name="post")
@@ -70,6 +83,10 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=False)
+
+    def save(self , *args , **kwargs):
+        self.body = censor_text(self.body)
+        super().save(*args , **kwargs)
 
     class Meta :
         ordering = ['-created']

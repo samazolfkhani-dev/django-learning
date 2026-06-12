@@ -10,9 +10,8 @@
         <br>
         Published Date : {{ post.publish | jformat:"%Y/%m/%d %H:%M"}}
     </h2>
-    <hr>
     <p> {{ post.description | markdown }}</p>
-    <br>
+    <hr>
     <div>
         {% with comments|length as cm_count %}
             Comment Count : {{ cm_count }} comment {{ cm_count | pluralize}}
