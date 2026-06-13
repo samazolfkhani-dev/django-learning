@@ -9,6 +9,7 @@
             <h3>
                 <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
             </h3>
+            <img src="{{ post.images.first.image_file.url }}"
             <p>{{ post.description | truncatewords:5 }}</p>
             <hr>
         </li>

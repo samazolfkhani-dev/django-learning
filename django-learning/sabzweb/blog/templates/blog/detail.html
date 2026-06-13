@@ -9,6 +9,10 @@
         Author : {{ post.author }}
         <br>
         Published Date : {{ post.publish | jformat:"%Y/%m/%d %H:%M"}}
+        <br>
+        {% for img in post.images.all %}
+            <img src="{{ img.image_file.url }}" alt=" {{ img.title}} ">
+        {% endfor %}
     </h2>
     <p> {{ post.description | markdown }}</p>
     <hr>
