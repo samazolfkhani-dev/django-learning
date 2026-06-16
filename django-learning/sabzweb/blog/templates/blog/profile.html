@@ -1,0 +1,26 @@
+{% extends 'parent/base.html' %}
+{% block title %}Post Lists{% endblock %}
+{% block content %}
+    <h1>Welcome!</h1>
+    <h4>Name : {{ user.username }}</h4>
+    <br>
+<table style="width:50%; border-collapse: collapse;">
+    <tr>
+        <th style="border:2px solid orange;">Row</th>
+        <th style="border:2px solid orange;">Display</th>
+        <th style="border:2px solid orange;">Edit</th>
+        <th style="border:2px solid orange;">Delete</th>
+    </tr>
+
+    {% for post in posts %}
+    <tr>
+        <td style="border:2px solid orange;">{{ forloop.counter }}</td>
+        <td style="border:2px solid orange;">
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </td>
+        <td style="border:2px solid orange;"><a href="#">Edit</a></td>
+        <td style="border:2px solid orange;"><a href="#">Delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

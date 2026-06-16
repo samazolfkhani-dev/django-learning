@@ -13,4 +13,5 @@ urlpatterns =  [
     path('ticket/' , views.ticket , name = 'ticket'),
     path('post/' , views.post_form , name = 'post_form'),
     path('search' , views.post_search , name = 'post_search'),
+    path('profile' , views.profile , name = 'profile'),
 ]
