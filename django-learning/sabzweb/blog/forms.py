@@ -37,18 +37,14 @@ class CommentForm(forms.ModelForm):
             'body' : forms.Textarea(attrs={'placeholder' : 'Enter Your Comment :' , 'class' : 'comment_body'})
         }
 
+class CreatePostForm(forms.ModelForm):
+    image1 = forms.ImageField(label="Image1")
+    image2 = forms.ImageField(label="Image2")
 
-class PostForm(forms.ModelForm):
-    def clean_title(self):
-        title = self.cleaned_data['title']
-        if title:
-            if not len(title) >= 3 :
-                raise forms.ValidationError("Title must have at least 3 letters!")
-            return title
-
-    class Meta :
+    class Meta:
         model = Post
-        fields = ['author' , 'title' , 'description' , 'reading_time']
+        fields = ['title' , 'description' , 'reading_time']
 
 class SearchForm (forms.Form):
     query = forms.CharField()
+

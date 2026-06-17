@@ -1,7 +1,7 @@
 from django.shortcuts import render , get_object_or_404 , redirect
 from django.http import HttpResponse ,Http404
 from .models import *
-from .forms import TicketForm, CommentForm, PostForm , SearchForm
+from .forms import TicketForm, CommentForm, CreatePostForm , SearchForm
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from django.views.generic import ListView , DetailView
 from django.views.decorators.http import require_POST
@@ -82,21 +82,6 @@ def post_comment(request , id):
     return render(request , 'forms/comment.html' , context)
 
 
-def post_form(request):
-    if request.method == 'POST':
-        author_id = request.POST.get('author')
-        author = get_object_or_404(User, id=author_id)
-        post = None
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = author
-            post.save()
-            return redirect('blog:index')
-    else :
-        form = PostForm()
-    return render(request, 'forms/post_form.html', {'form': form})
-
 def post_search(request):
     query = None
     result = []
@@ -125,3 +110,17 @@ def profile(request):
         'user':user,
     }
     return render(request , 'blog/profile.html' , context)
+
+def create_post (request):
+    if request.method == 'POST':
+        form = CreatePostForm(request.POST , request.FILES)
+        if form.is_valid():
+            post = form.save(commit = False)
+            post.author = request.user
+            post.save()
+            Image.objects.create(image_file=form.cleaned_data['image1'] , post=post)
+            Image.objects.create(image_file=form.cleaned_data['image2'] , post=post)
+            return redirect('blog:profile')
+    else :
+        form = CreatePostForm()
+    return render(request, 'forms/create_post.html' , {'form':form})

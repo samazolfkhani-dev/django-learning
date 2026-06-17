@@ -1,6 +1,7 @@
 from django.db import models
 from django_jalali.db import models as jmodels
 from django.urls import reverse
+from django.template.defaultfilters import slugify
 # Create your models here.
 
 #Managers
@@ -52,6 +53,10 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:post_detail' , args=[self.id])
+
+    def save(self , *args , **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args , **kwargs)
 
 class Ticket(models.Model):
     message = models.TextField(verbose_name='Message')
