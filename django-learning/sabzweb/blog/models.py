@@ -115,4 +115,4 @@ class Image(models.Model):
         verbose_name_plural = "images"
 
     def __str__(self):
-        return self.title if self.title else 'no title'
+        return self.title if self.title else self.image_file.name
