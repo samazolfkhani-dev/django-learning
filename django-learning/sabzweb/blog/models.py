@@ -42,6 +42,12 @@ class Post(models.Model):
         self.description = censor_text(self.description)
         super().save(*args , **kwargs)
 
+    def delete(self , *args , **kwargs):
+        for img in self.images.all() :
+            storage , path = img.image_file.storage , img.image_file.path
+            storage.delete(path)
+        super().delete(*args , **kwargs)
+
     class Meta:
         ordering = ['-publish']
         indexes = [

@@ -94,7 +94,9 @@ def post_search(request):
                 filter(similarity__gte = 0.2).order_by('-similarity')
             result2 = Post.published.annotate(similarity = TrigramSimilarity('description' , query)).\
                 filter(similarity__gte = 0.2).order_by('-similarity')
-            result = result1 | result2
+            result3 = Post.published.annotate(similarity=TrigramSimilarity('images__image_file' , query)).\
+                filter(similarity__gte = 0.2).order_by('-similarity')
+            result = (result1 | result2 | result3).distinct()
     context = {
         'query':query,
         'result':result,
@@ -124,3 +126,10 @@ def create_post (request):
     else :
         form = CreatePostForm()
     return render(request, 'forms/create_post.html' , {'form':form})
+
+def delete_post(request , post_id):
+    post = get_object_or_404(Post , id = post_id)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('blog:profile')
+    return render(request, 'forms/delete_post.html' , {'post':post})
