@@ -1,3 +1,5 @@
+from email.mime import image
+
 from django.db import models
 from django_jalali.db import models as jmodels
 from django.urls import reverse
@@ -127,3 +129,8 @@ class Image(models.Model):
 
     def __str__(self):
         return self.title if self.title else self.image_file.name
+
+    def delete(self , *args , **kwargs):
+        storage , path = self.image_file.storage , self.image_file.path
+        storage.delete(path)
+        super().delete(*args , **kwargs)
