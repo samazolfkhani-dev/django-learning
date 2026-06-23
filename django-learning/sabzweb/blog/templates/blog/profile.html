@@ -25,6 +25,9 @@
     {% endfor %}
 </table>
     <br>
+    <a href="{% url 'blog:password_change' %}">Change Password</a>
+    <br>
+<br>
     <form action="{% url 'blog:logout' %}" method="post">
         {% csrf_token %}
         <button type="submit">Logout</button>
