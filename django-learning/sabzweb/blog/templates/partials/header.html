@@ -1,4 +1,5 @@
-<form method="Get" action="{% url 'blog:post_search' %}">
-    <input type="text" name="query" required placeholder="enter your search: ">
-    <input type="submit" name="search">
-</form>
+{% if request.user.is_authenticated %}
+    <a href="#">{{request.user.first_name | default:request.user.username }}</a>
+{% else %}
+    <a href="{% url 'blog:login' %}">Login</a>
+{% endif %}

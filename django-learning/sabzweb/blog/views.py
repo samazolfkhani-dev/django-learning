@@ -1,11 +1,12 @@
 from django.shortcuts import render , get_object_or_404 , redirect
 from django.http import HttpResponse ,Http404
 from .models import *
-from .forms import TicketForm, CommentForm, CreatePostForm , SearchForm
+from .forms import TicketForm, CommentForm, CreatePostForm, SearchForm, LoginForm
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from django.views.generic import ListView , DetailView
 from django.views.decorators.http import require_POST
 from django.contrib.postgres.search import TrigramSimilarity
+from django.contrib.auth import authenticate , login
 from django.db.models import Q
 
 
@@ -153,3 +154,20 @@ def delete_image(request , image_id):
     image = get_object_or_404(Image , id = image_id)
     image.delete()
     return redirect('blog:profile')
+
+def user_login (request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username = cd['username'] , password = cd['password'])
+            if user is not None :
+                login(request, user)
+                if user.is_active:
+                    return redirect('blog:profile')
+                else:
+                    return HttpResponse('You Are Disabled!')
+            return HttpResponse('You Are Not Logged In!')
+    else:
+        form = LoginForm()
+        return render(request , 'forms/login.html' , {'form' : form})
