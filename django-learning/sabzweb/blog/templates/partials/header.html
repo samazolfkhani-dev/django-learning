@@ -2,4 +2,6 @@
     <a href="{% url 'blog:profile' %}">{{request.user.first_name | default:request.user.username }}</a>
 {% else %}
     <a href="{% url 'blog:login' %}">Login</a>
+    <br>
+    <a href="{% url 'blog:register' %}">Register</a>
 {% endif %}

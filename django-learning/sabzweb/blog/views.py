@@ -1,7 +1,7 @@
 from django.shortcuts import render , get_object_or_404 , redirect
 from django.http import HttpResponse ,Http404
 from .models import *
-from .forms import TicketForm, CommentForm, CreatePostForm, SearchForm, LoginForm
+from .forms import TicketForm, CommentForm, CreatePostForm, SearchForm, RegisterForm
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from django.views.generic import ListView , DetailView
 from django.views.decorators.http import require_POST
@@ -180,3 +180,15 @@ def delete_image(request , image_id):
 # def log_out(request):
 #     logout(request)
 #     return redirect('blog:index')
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit = False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            return render(request , 'registration/register_done.html' , {'user':user})
+    else :
+        form = RegisterForm()
+    return render(request, 'forms/register.html' , {'form':form})
