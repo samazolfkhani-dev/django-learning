@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Comment , Post
+from .models import Comment , Post ,Account
 
 class TicketForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea , required=True)
@@ -65,3 +65,15 @@ class RegisterForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError("Passwords don't match!")
         return cd['password2']
+
+
+class EditUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name' , 'last_name' , 'email']
+
+
+class EditAccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['bio' , 'date_of_birth' , 'job']

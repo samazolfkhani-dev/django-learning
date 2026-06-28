@@ -1,7 +1,7 @@
 from django.shortcuts import render , get_object_or_404 , redirect
 from django.http import HttpResponse ,Http404
 from .models import *
-from .forms import TicketForm, CommentForm, CreatePostForm, SearchForm, RegisterForm
+from .forms import TicketForm, CommentForm, CreatePostForm, SearchForm, RegisterForm , EditUserForm , EditAccountForm
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from django.views.generic import ListView , DetailView
 from django.views.decorators.http import require_POST
@@ -188,7 +188,26 @@ def register(request):
             user = form.save(commit = False)
             user.set_password(form.cleaned_data['password'])
             user.save()
+            Account.objects.create(user = user)
             return render(request , 'registration/register_done.html' , {'user':user})
     else :
         form = RegisterForm()
     return render(request, 'forms/register.html' , {'form':form})
+
+
+def edit_account(request):
+    if request.method == 'POST':
+        user_form = EditUserForm(request.POST , instance = request.user)
+        account_form = EditAccountForm(request.POST , instance = request.user.account)
+        if user_form.is_valid() and account_form.is_valid():
+            user_form.save()
+            account_form.save()
+            return redirect('blog:profile')
+    else :
+        user_form = EditUserForm(instance = request.user)
+        account_form = EditAccountForm(instance = request.user.account)
+    context = {
+        'user_form':user_form,
+        'account_form':account_form,
+    }
+    return render(request , 'registration/edit_account.html' , context)

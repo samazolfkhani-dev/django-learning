@@ -1,6 +1,7 @@
 from email.mime import image
 
 from django.db import models
+from django.db.models import OneToOneField
 from django_jalali.db import models as jmodels
 from django.urls import reverse
 from django.template.defaultfilters import slugify
@@ -134,3 +135,13 @@ class Image(models.Model):
         storage , path = self.image_file.storage , self.image_file.path
         storage.delete(path)
         super().delete(*args , **kwargs)
+
+
+class Account(models.Model):
+    user = models.OneToOneField(User , on_delete=models.CASCADE , related_name='account')
+    date_of_birth = jmodels.jDateField(blank = True, null = True)
+    bio = models.TextField(blank = True, null = True)
+    job = models.TextField(blank = True, null = True)
+
+    def __str__(self):
+        return self.user.username
