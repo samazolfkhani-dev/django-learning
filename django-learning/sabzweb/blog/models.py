@@ -4,7 +4,9 @@ from django.db import models
 from django.db.models import OneToOneField
 from django_jalali.db import models as jmodels
 from django.urls import reverse
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, date
+
+
 # Create your models here.
 
 #Managers
@@ -22,6 +24,11 @@ class Post(models.Model):
         DRAFT = 'DF' , 'Draft'
         PUBLISHED = 'PB' , 'Published'
         REJECTED = 'RJ' , 'Rejected'
+
+    class Category(models.TextChoices):
+        SKY = 'sky' , 'Sky'
+        PROGRAMMING = 'programming' , 'Programming'
+        OTHERS = 'others' , 'Others'
     #relational
     author = models.ForeignKey(User , on_delete=models.CASCADE , related_name='user_posts')
     #data field
@@ -34,7 +41,7 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     #choice field
     status = models.CharField(max_length=2 , choices=Status.choices, default=Status.DRAFT)
-
+    category = models.CharField(max_length = 20 , choices = Category.choices , default = Category.OTHERS)
     reading_time = models.PositiveIntegerField()
 
     #Managers
@@ -113,9 +120,10 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.name} : {self.post}"
 
+
 class Image(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="images" , verbose_name="post")
-    image_file = models.ImageField(upload_to="post_images") #verbose_name = A Name Which Is Shown To Users In Admin Panel & Forms ...
+    image_file = models.ImageField(upload_to='post_images') #verbose_name = A Name Which Is Shown To Users In Admin Panel & Forms ...
     title = models.CharField(max_length=250 , null=True , blank=True)
     description = models.TextField(null=True , blank=True)
     created = jmodels.jDateTimeField(auto_now_add=True)
@@ -135,7 +143,6 @@ class Image(models.Model):
         storage , path = self.image_file.storage , self.image_file.path
         storage.delete(path)
         super().delete(*args , **kwargs)
-
 
 class Account(models.Model):
     user = models.OneToOneField(User , on_delete=models.CASCADE , related_name='account')

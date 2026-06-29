@@ -45,7 +45,7 @@ class CreatePostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title' , 'description' , 'reading_time']
+        fields = ['title' , 'description' , 'reading_time' , 'category']
 
 class SearchForm (forms.Form):
     query = forms.CharField()

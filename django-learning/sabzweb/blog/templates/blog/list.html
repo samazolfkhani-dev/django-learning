@@ -2,7 +2,11 @@
 {% block title %}Post Lists{% endblock %}
 {% block content %}
     {% include 'partials/header.html' %}
-    <h1> Post List </h1>
+    {% if category %}
+        <h1>Results For {{ category }} : </h1>
+    {% else %}
+        <h1>Post Lists : </h1>
+    {% endif %}
 <ol style="--length: {{ posts|length }};" role="list">
     {% for post in posts %}
         <li style="--i: {{forloop.counter }}">
@@ -15,5 +19,9 @@
         </li>
     {% endfor %}
 </ol>
-    {% include "partials/pagination.html" with page=page_obj %}
+    <h4>categories :</h4>
+    <p><a href="{% url 'blog:post_list_category' 'sky' %}">Sky</a></p>
+    <p><a href="{% url 'blog:post_list_category' 'programming' %}">Programming</a></p>
+    <p><a href="{% url 'blog:post_list_category' 'others' %}">Others</a></p>
+    {% include "partials/pagination.html" with page=posts %}
 {% endblock %}
