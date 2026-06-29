@@ -120,6 +120,10 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.name} : {self.post}"
 
+def post_image_path(instance, filename):
+    today = date.today()
+    username = instance.post.author.user.username
+    return f'blog/{username}/{today.year}/{today.month}/{today.day}/{filename}'
 
 class Image(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="images" , verbose_name="post")
