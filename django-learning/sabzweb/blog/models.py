@@ -5,7 +5,7 @@ from django.db.models import OneToOneField
 from django_jalali.db import models as jmodels
 from django.urls import reverse
 from django.template.defaultfilters import slugify, date
-
+from django.utils import timezone
 
 # Create your models here.
 
@@ -121,13 +121,13 @@ class Comment(models.Model):
         return f"{self.name} : {self.post}"
 
 def post_image_path(instance, filename):
-    today = date.today()
-    username = instance.post.author.user.username
+    today = timezone.now()
+    username = instance.post.author.username
     return f'blog/{username}/{today.year}/{today.month}/{today.day}/{filename}'
 
 class Image(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="images" , verbose_name="post")
-    image_file = models.ImageField(upload_to='post_images') #verbose_name = A Name Which Is Shown To Users In Admin Panel & Forms ...
+    image_file = models.ImageField(upload_to=post_image_path) #verbose_name = A Name Which Is Shown To Users In Admin Panel & Forms ...
     title = models.CharField(max_length=250 , null=True , blank=True)
     description = models.TextField(null=True , blank=True)
     created = jmodels.jDateTimeField(auto_now_add=True)
@@ -156,3 +156,6 @@ class Account(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def get_absolute_url(self):
+        return reverse('blog:author_detail' , args=[self.user.id])

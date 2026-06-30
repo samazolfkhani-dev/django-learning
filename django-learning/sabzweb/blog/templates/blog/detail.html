@@ -11,7 +11,7 @@
     <br>
     {% for item in content %}
         {% if item.paragraph %}
-            <p>{{ item.paragraph }}</p>
+            <p>{{ item.paragraph | markdown }}</p>
         {% endif %}
         {% if item.image %}
             <img src="{{ item.image.image_file.url }}" alt="{{ item.image.title }}">

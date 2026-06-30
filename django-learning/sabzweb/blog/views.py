@@ -235,3 +235,13 @@ def edit_account(request):
         'account_form':account_form,
     }
     return render(request , 'registration/edit_account.html' , context)
+
+
+def author_detail(request , id):
+    author = get_object_or_404(Account , id = id)
+    posts = Post.published.filter(author__account__id = id)
+    context = {
+        'author':author,
+        'posts':posts,
+    }
+    return render(request , 'blog/author_detail.html' , context)
