@@ -5,16 +5,18 @@
 {% load jformat %}
     {% include 'partials/header.html' %}
     <h1>{{post.title}}</h1>
-    <h2>
-        Author : {{ post.author }}
-        <br>
-        Published Date : {{ post.publish | jformat:"%Y/%m/%d %H:%M"}}
-        <br>
-        {% for img in post.images.all %}
-            <img src="{{ img.image_file.url }}" alt=" {{ img.title}} ">
-        {% endfor %}
-    </h2>
-    <p> {{ post.description | markdown }}</p>
+    Author : {{ post.author }}
+    <br>
+    Published Date : {{ post.publish | jformat:"%Y/%m/%d %H:%M"}}
+    <br>
+    {% for item in content %}
+        {% if item.paragraph %}
+            <p>{{ item.paragraph }}</p>
+        {% endif %}
+        {% if item.image %}
+            <img src="{{ item.image.image_file.url }}" alt="{{ item.image.title }}">
+        {% endif %}
+    {% endfor %}
     <hr>
     <div>
         {% with comments|length as cm_count %}

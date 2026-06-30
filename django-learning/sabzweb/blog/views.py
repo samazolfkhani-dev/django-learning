@@ -43,12 +43,32 @@ def post_list(request , category = None):
 
 def post_detail(request , id):
     post = get_object_or_404(Post , id = id , status = Post.Status.PUBLISHED)
+    paragraphs = post.description.split("\n")
+    images = list(post.images.all())
+    content = []
+    for i , paragraph in enumerate(paragraphs):
+        if i < len(images):
+            image = images[i]
+        else :
+            image = None
+        content.append({
+            'paragraph' : paragraph,
+            'image' : image,
+        })
+
+    for image in images[len(paragraphs):] :
+        content.append({
+            'paragraph' : None,
+            'image' : image,
+        })
+
     comments = post.comments.filter(active = True)
     form = CommentForm()
     context = {
         'post' : post,
         'comments' : comments,
         'form' : form,
+        'content' : content,
     }
     return render(request , 'blog/detail.html' , context)
 
