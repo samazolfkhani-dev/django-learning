@@ -8,6 +8,9 @@
     <p>Total Posts : {% total_post %}</p>
     <p>Last Post Date : {% last_post_date %}</p>
     <br>
+    <h4>A Post For You :</h4>
+    <p><a href="{{ random_post.get_absolute_url }}">{{ random_post.title }}</a></p>
+    <br>
     {% last_posts 3 %}
     <br>
     <h2>Popular Posts</h2>

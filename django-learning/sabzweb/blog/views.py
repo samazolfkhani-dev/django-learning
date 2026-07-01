@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render , get_object_or_404 , redirect
 from django.http import HttpResponse ,Http404
 from .models import *
@@ -10,11 +11,12 @@ from django.contrib.auth import authenticate , login , logout
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
-
 # Create your views here.
 
 def index(request):
-    return render(request, 'blog/index.html')
+    posts = Post.published.all()
+    random_post = random.choice(posts)
+    return render(request, 'blog/index.html' , {'random_post' : random_post})
 
 def post_list(request , category = None):
     if category is not None :
@@ -133,6 +135,7 @@ def post_search(request):
 def profile(request):
     user = request.user
     posts = Post.published.filter(author=user)
+    comments = Comment.objects.filter()
     context = {
         'posts':posts,
         'user':user,
@@ -238,10 +241,10 @@ def edit_account(request):
 
 
 def author_detail(request , id):
-    author = get_object_or_404(Account , id = id)
-    posts = Post.published.filter(author__account__id = id)
+    account = get_object_or_404(Account , id = id)
+    posts = Post.published.filter(author = account.user)
     context = {
-        'author':author,
+        'account':account,
         'posts':posts,
     }
     return render(request , 'blog/author_detail.html' , context)

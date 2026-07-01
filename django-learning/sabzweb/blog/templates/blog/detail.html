@@ -5,7 +5,8 @@
 {% load jformat %}
     {% include 'partials/header.html' %}
     <h1>{{post.title}}</h1>
-    Author : {{ post.author }}
+    Author :
+    <p><a href="{% url 'blog:author_detail' post.author.account.id %}">{{ post.author.account.user.username }}</a></p>
     <br>
     Published Date : {{ post.publish | jformat:"%Y/%m/%d %H:%M"}}
     <br>
@@ -29,7 +30,7 @@
     <div>
         <p>Comment List : </p>
         {% for cm in comments %}
-            {{ cm.name }} :
+            {{ cm.user.username }} :
             {{ cm.body | linebreaks}}
             <br>
         {% empty %}
