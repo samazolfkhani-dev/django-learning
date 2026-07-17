@@ -1,7 +1,5 @@
 from email.mime import image
-
 from django.db import models
-from django.db.models import OneToOneField
 from django_jalali.db import models as jmodels
 from django.urls import reverse
 from django.template.defaultfilters import slugify, date
@@ -37,7 +35,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=250)
     #date
     publish = models.DateTimeField(default=timezone.now)
-    created = models.DateTimeField(auto_now_add=True)
+    created =  models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     #choice field
     status = models.CharField(max_length=2 , choices=Status.choices, default=Status.DRAFT)
