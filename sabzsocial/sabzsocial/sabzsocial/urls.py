@@ -21,7 +21,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/' , include('social.urls', namespace='social')),
+    path('' , include('social.urls', namespace='social')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL , document_root =settings.MEDIA_ROOT )
