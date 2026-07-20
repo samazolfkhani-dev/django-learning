@@ -1,0 +1,8 @@
+
+    <h1>Edit Info</h1>
+    <p>Please Edit Yor Info: </p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <input type="submit" value="Edit">
+    </form>

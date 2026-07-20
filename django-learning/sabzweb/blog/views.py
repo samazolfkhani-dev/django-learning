@@ -135,7 +135,6 @@ def post_search(request):
 def profile(request):
     user = request.user
     posts = Post.published.filter(author=user)
-    comments = Comment.objects.filter()
     context = {
         'posts':posts,
         'user':user,
