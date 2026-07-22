@@ -3,6 +3,10 @@ from django.shortcuts import render , redirect
 from django.http import HttpResponse
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from sabzsocial import settings
+
+
 # Create your views here.
 
 def profile(request):
@@ -37,3 +41,18 @@ def edit_user(request):
         'user_form':user_form,
     }
     return render(request , 'registration/edit_user.html' , context)
+
+def ticket(request):
+    sent = False
+    if request.method == "POST":
+        form = TicketForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            message = f"{cd['name']}\n{cd['email']}\n\n{cd['message']}"
+            send_mail(cd['subject'],message,'samazolfkhani12@gmail.com',['samazolfkhani12@gmail.com'] , fail_silently=False)
+            sent = True
+    else:
+        form = TicketForm()
+    return render(
+        request,'forms/ticket.html',{'form': form,'sent': sent}
+    )
