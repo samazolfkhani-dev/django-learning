@@ -1,5 +1,5 @@
 from django.contrib.auth import logout
-from django.shortcuts import render , redirect
+from django.shortcuts import render , redirect , get_object_or_404
 from django.http import HttpResponse
 from .forms import *
 from django.contrib.auth.decorators import login_required
@@ -9,8 +9,10 @@ from sabzsocial import settings
 
 # Create your views here.
 
+@login_required
 def profile(request):
-    return HttpResponse("Logged in Successfully.")
+    user = get_object_or_404(User , pk= request.user.id)
+    return render(request , 'social/profile.html' , {'user' : user})
 
 def log_out(request):
     logout(request)
