@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'taggit'
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,5 @@ EMAIL_HOST_USER = 'samazolfkhani12@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = 'raflbmhrzjtsmspi'
+
+TAGGIT_CASE_INSENSITIVE = True
