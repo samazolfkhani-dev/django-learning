@@ -60,3 +60,9 @@ class TicketForm(forms.Form):
             if not phone.isnumeric():
                 raise forms.ValidationError("Phone number must have digits!")
         return phone
+
+
+class CreatePostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['description' , 'tags']

@@ -70,3 +70,18 @@ def post_list(request , tag_slug = None):
         'tag' : tag
     }
     return render(request , "social/list.html" , context)
+
+
+@login_required()
+def create_post (request):
+    if request.method == 'POST':
+        form = CreatePostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit = False)
+            post.author = request.user
+            post.save()
+            form.save_m2m()
+            return redirect('social:profile')
+    else :
+        form = CreatePostForm()
+    return render(request, 'forms/create_post.html' , {'form':form})
