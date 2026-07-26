@@ -5,7 +5,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from sabzsocial import settings
-
+from taggit.models import Tag
 
 # Create your views here.
 
@@ -58,3 +58,15 @@ def ticket(request):
     return render(
         request,'forms/ticket.html',{'form': form,'sent': sent}
     )
+
+def post_list(request , tag_slug = None):
+    posts = Post.objects.all()
+    tag = None
+    if tag_slug :
+        tag = get_object_or_404(Tag , slug = tag_slug)
+        posts = Post.objects.filter(tags__in = [tag])
+    context = {
+        'posts' : posts ,
+        'tag' : tag
+    }
+    return render(request , "social/list.html" , context)
