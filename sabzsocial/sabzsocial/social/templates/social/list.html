@@ -3,7 +3,9 @@
 {% endif %}
 
 {% for post in posts %}
-    {{ post.description | truncatewords:4 | linebreaks }}
+    <a href="{{ post.get_absolute_url }}">
+        {{ post.description | truncatewords:4 | linebreaks }}
+    </a>
     Published At {{ post.created }} by {{ post.author }}
     <br>
     {% for tag in post.tags.all %}
