@@ -56,9 +56,7 @@ def ticket(request):
             sent = True
     else:
         form = TicketForm()
-    return render(
-        request,'forms/ticket.html',{'form': form,'sent': sent}
-    )
+    return render(request,'forms/ticket.html',{'form': form,'sent': sent})
 
 def post_list(request , tag_slug = None):
     posts = Post.objects.all()
@@ -88,13 +86,42 @@ def create_post (request):
     return render(request, 'forms/create_post.html' , {'form':form})
 
 
-def post_detail(request , post_id):
-    post = get_object_or_404(Post , id = post_id )
-    post_tags_ids = post.tags.values_list('id' , flat = True)
-    similar_post = Post.objects.filter(tags__in = post_tags_ids).exclude(id = post.id)
-    similar_post = similar_post.annotate(same_tags = Count('tags')).order_by('-same_tags' , '-created')[0:2]
+from django.db.models import Count
+from django.shortcuts import get_object_or_404, render
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    post_tags_ids = post.tags.values_list("id", flat=True)
+    similar_posts = (
+        Post.objects.filter(tags__in=post_tags_ids)
+        .exclude(id=post.id)
+        .annotate(same_tags=Count("tags"))
+        .order_by("-same_tags", "-created")[:2])
+    comments = post.comments.all()      
+    form = CommentForm()
     context = {
-        'post' : post,
-        'similar_posts' : similar_post
+        "post": post,
+        "comments": comments,
+        "form": form,
+        "similar_posts": similar_posts,
     }
-    return render(request , 'social/detail.html' , context)
+
+    return render(request, "social/detail.html", context)
+
+
+@login_required
+def post_comment(request , id):
+    from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+
+@login_required
+def post_comment(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+    return redirect("social:post_detail", post_id=post.id)

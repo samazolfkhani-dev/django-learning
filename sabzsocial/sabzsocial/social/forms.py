@@ -66,3 +66,19 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['description' , 'tags']
+
+
+class CommentForm(forms.ModelForm):
+    def clean_body(self):
+        body = self.cleaned_data['body']
+        if body :
+            if not len(body) > 2 :
+                raise forms.ValidationError("Comment must have at least 2 letters!")
+            return body
+    class Meta :
+        model = Comment
+        fields = ['body']
+        widgets = {
+            'body' : forms.Textarea(attrs={'placeholder' : 'Enter Your Comment :' , 'class' : 'comment_body'})
+        }
+

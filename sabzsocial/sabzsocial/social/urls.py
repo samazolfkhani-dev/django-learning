@@ -22,5 +22,6 @@ urlpatterns = [
     path('posts/' , views.post_list , name = "post_list"),
     path('posts/post/<slug:tag_slug>/' , views.post_list , name = "post_list_by_tag"),
     path('posts/create_post' , views.create_post , name = 'create_post'),
-    path('posts/detail/<int:post_id>' , views.post_detail , name='post_detail')
+    path('posts/detail/<int:post_id>' , views.post_detail , name='post_detail'),
+    path('posts/<int:id>/comments' , views.post_comment, name = 'post_comment' ),
 ]

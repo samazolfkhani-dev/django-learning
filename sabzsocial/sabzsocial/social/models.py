@@ -35,3 +35,33 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('social:post_detail' , args=[self.id])
 
+
+def censor_text(text):
+    bad_words = ["loser" , "sheet"]
+    for word in bad_words:
+        text = text.replace(word , "*" * len(word))
+    return text
+class Comment(models.Model):
+    post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="comments" , verbose_name="book")
+    user = models.ForeignKey(User, on_delete=models.CASCADE , related_name='comments')
+    body = models.TextField(verbose_name="message")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=False)
+
+    def save(self , *args , **kwargs):
+        self.body = censor_text(self.body)
+        super().save(*args , **kwargs)
+
+    class Meta :
+        ordering = ['-created']
+        indexes = [
+            models.Index(fields=['-created'])
+        ]
+        verbose_name = "comment"
+        verbose_name_plural = "comments"
+
+    def __str__(self):
+        return f"{self.name} : {self.post}"
+
+

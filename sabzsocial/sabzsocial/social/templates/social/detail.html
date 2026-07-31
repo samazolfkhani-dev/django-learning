@@ -5,7 +5,27 @@ Published By {{ post.author }}
     <a href="{% url 'social:post_list_by_tag' tag.slug %}">{{ tag.name }}</a>
     {% if not forloop.last %} , {% endif %}
 {% endfor %}
-
+<hr>
+<p>Comment List : </p>
+        {% for cm in comments %}
+            {{ cm.user.username }} :
+            {{ cm.body | linebreaks}}
+            <br>
+        {% empty %}
+            no comments!
+        {% endfor %}
+<hr>
+{% if user.is_authenticated %}
+    <form method="post" action="{% url 'social:post_comment' post.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+{% else %}
+    <h4>For Adding Comment You Have To Login!</h4>
+    <p><a href="{% url 'social:login' %}">Login</a></p>
+{% endif %}
+<hr>
 <h3>Similar Posts : </h3>
 {% for post in similar_posts %}
     <a href="{{ post.get_absolute_url }}">
