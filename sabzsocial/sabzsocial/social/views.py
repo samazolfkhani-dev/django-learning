@@ -121,6 +121,4 @@ def post_comment(request, id):
             comment.post = post
             comment.user = request.user
             comment.save()
-        else :
-            print(form.errors)
     return redirect("social:post_detail", post_id=post.id)
