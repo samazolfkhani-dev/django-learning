@@ -42,7 +42,7 @@ def censor_text(text):
         text = text.replace(word , "*" * len(word))
     return text
 class Comment(models.Model):
-    post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="comments" , verbose_name="book")
+    post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name="comments" , verbose_name="post")
     user = models.ForeignKey(User, on_delete=models.CASCADE , related_name='comments')
     body = models.TextField(verbose_name="message")
     created = models.DateTimeField(auto_now_add=True)
@@ -62,6 +62,6 @@ class Comment(models.Model):
         verbose_name_plural = "comments"
 
     def __str__(self):
-        return f"{self.name} : {self.post}"
+        return f"{self.user.username} : {self.post}"
 
 

@@ -26,3 +26,11 @@ class PostAdmin(admin.ModelAdmin):
 
     def tag_list(self , obj):
         return " , ".join(o.name for o in obj.tags.all())
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['post' , 'user' , 'active']
+    ordering = ['created']
+    list_filter = ['active']
+    list_editable = ['active']
+    list_display_links = ['post' , 'user']
