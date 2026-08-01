@@ -63,6 +63,8 @@ class TicketForm(forms.Form):
 
 
 class CreatePostForm(forms.ModelForm):
+    image1 = forms.ImageField(label="Image1" , required = False)
+    image2 = forms.ImageField(label="Image2" , required = False)
     class Meta:
         model = Post
         fields = ['description' , 'tags']

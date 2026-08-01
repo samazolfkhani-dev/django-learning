@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from taggit.managers import TaggableManager
 from django.urls import reverse
-
+from django_resized import ResizedImageField
 # Create your models here.
 
 class User(AbstractUser):
@@ -10,7 +10,7 @@ class User(AbstractUser):
     bio = models.TextField(null=True, blank=True)
     job = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=11, null=True, blank=True)
-    photo = models.ImageField(upload_to='accounts_images/', null=True, blank=True)
+    photo = ResizedImageField(upload_to='accounts_images/', size = [500 , 500] , quality = 75 , crop = ['middle' , 'center'] , null=True, blank=True)
 
 class Post(models.Model):
     #relational
@@ -64,4 +64,19 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.user.username} : {self.post}"
 
+
+class Image(models.Model) :
+    title = models.CharField(null = True , blank = True)
+    post = models.ForeignKey(Post , on_delete = models.CASCADE , related_name = "images" , verbose_name = "image")
+    description = models.CharField(null = True , blank = True)
+    image_file = ResizedImageField(upload_to = "post_images/" , size = [500 , 500] , quality = 75 , crop = ['middle' , 'center'])
+    created_at = models.DateTimeField(auto_now_add = True)
+
+    class Meta :
+        indexes = [
+            models.Index(fields = ['title' , 'description' , 'id'])
+        ]
+
+    def __str__(self):
+        return f"{self.title} : {self.description}"
 

@@ -1,3 +1,8 @@
+{% for img in images %}
+    {% if img.image_file %}
+        <img src="{{ img.image_file.url }}" alt="{{ img.title }}">
+    {% endif %}
+{% endfor %}
 {{ post.description | linebreaks }}
 Published By {{ post.author }}
 <br>

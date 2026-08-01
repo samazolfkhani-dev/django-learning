@@ -11,6 +11,11 @@ class UserAdmin(UserAdmin):
         ('Additional Information' , {'fields': ('date_of_birth', 'bio' , 'job' , 'phone' , 'photo')}),
     )
 
+class ImageInline(admin.TabularInline) :
+    model = Image
+    extra = 1
+    readonly_fields = ['title' , 'description' , 'image_file']
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['author' , 'created' , 'tag_list']
@@ -20,6 +25,7 @@ class PostAdmin(admin.ModelAdmin):
     raw_id_fields = ['author']
     date_hierarchy = 'created'
     list_display_links = ['author']
+    inlines = [ImageInline]
 
     def get_queryset(self , request):
         return super().get_queryset(request).prefetch_related('tags')

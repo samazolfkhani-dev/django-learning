@@ -3,6 +3,11 @@
 {% endif %}
 
 {% for post in posts %}
+    {% for img in post.images.all %}
+        {% if img.image_file %}
+            <img src="{{ img.image_file.url }}" width="250" height="250" alt="{{ img.title }}">
+        {% endif %}
+    {% endfor %}
     <a href="{{ post.get_absolute_url }}">
         {{ post.description | truncatewords:4 | linebreaks }}
     </a>

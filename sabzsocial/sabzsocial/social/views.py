@@ -21,7 +21,7 @@ def log_out(request):
 
 def register(request):
     if request.method == 'POST':
-        form = RegisterForm(request.POST)
+        form = RegisterForm(request.POST , request.FILES)
         if form.is_valid():
             user = form.save(commit = False)
             user.set_password(form.cleaned_data['password'])
@@ -77,12 +77,18 @@ def post_list(request , tag_slug = None):
 @login_required()
 def create_post (request):
     if request.method == 'POST':
-        form = CreatePostForm(request.POST)
+        form = CreatePostForm(request.POST , request.FILES)
         if form.is_valid():
             post = form.save(commit = False)
             post.author = request.user
             post.save()
             form.save_m2m()
+            image1 = form.cleaned_data['image1']
+            image2 = form.cleaned_data['image2']
+            if image1 :
+                Image.objects.create(image_file = image1 , post=post)
+            if image2 :
+                Image.objects.create(image_file = image2 , post=post)
             return redirect('social:profile')
     else :
         form = CreatePostForm()
@@ -92,6 +98,7 @@ def create_post (request):
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     post_tags_ids = post.tags.values_list("id", flat=True)
+    images = list(post.images.all())
     similar_posts = (
         Post.objects.filter(tags__in=post_tags_ids)
         .exclude(id=post.id)
@@ -107,6 +114,7 @@ def post_detail(request, post_id):
         "comments": comments,
         "form": form,
         "similar_posts": similar_posts,
+        "images" : images
     }
 
     return render(request, "social/detail.html", context )
