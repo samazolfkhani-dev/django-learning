@@ -130,3 +130,32 @@ def post_comment(request, id):
             comment.user = request.user
             comment.save()
     return redirect("social:post_detail", post_id=post.id)
+
+@login_required()
+def edit_post (request , post_id):
+    post = get_object_or_404(Post , id = post_id)
+    if request.method == 'POST':
+        form = CreatePostForm(request.POST , request.FILES , instance = post)
+        if form.is_valid():
+            post = form.save(commit = False)
+            post.author = request.user
+            post.save()
+            form.save_m2m()
+            image1 = form.cleaned_data['image1']
+            image2 = form.cleaned_data['image2']
+            if image1 :
+                Image.objects.create(image_file = image1 , post=post)
+            if image2 :
+                Image.objects.create(image_file = image2 , post=post)
+            return redirect('social:post_detail' , post_id = post.id)
+    else :
+        form = CreatePostForm(instance = post)
+    return render(request, 'forms/create_post.html' , {'form':form})
+
+@login_required
+def delete_post(request , post_id):
+    post = get_object_or_404(Post , id = post_id)
+    if request.method == "POST" :
+        post.delete()
+        return redirect('social:profile')
+    return render(request ,'forms/delete_post.html' , {'post' : post})

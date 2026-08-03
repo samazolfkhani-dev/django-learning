@@ -1,0 +1,8 @@
+
+    <h2>Are You Sure About Deleting {{ post.description | truncatewords:4}} ?</h2>
+    <a href="{% url 'social:profile' %}">Back To Profile</a>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Delete">
+    </form>

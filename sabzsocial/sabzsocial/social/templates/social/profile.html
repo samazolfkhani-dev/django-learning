@@ -2,4 +2,24 @@
 {% if user.photo %}
     <img src="{{ user.photo.url}}" width="250" height="250">
 {% endif %}
+    <table style="width:50%; border-collapse: collapse;">
+        <tr>
+            <th style="border:2px solid orange;">Row</th>
+            <th style="border:2px solid orange;">Description</th>
+            <th style="border:2px solid orange;">Edit</th>
+            <th style="border:2px solid orange;">Delete</th>
+        </tr>
+
+        {% for post in user.user_posts.all %}
+        <tr>
+            <td style="border:2px solid orange;">{{ forloop.counter }}</td>
+            <td style="border:2px solid orange;">
+                <a href="{{ post.get_absolute_url }}">{{ post.description | truncatewords:4 }}</a>
+            </td>
+            <td style="border:2px solid orange;"><a href="{% url 'social:edit_post' post.id %}" >edit post</a></td>
+            <td style="border:2px solid orange;"><a href="{% url 'social:delete_post' post.id %}">delete post</a></td>
+        </tr> 
+        {% endfor %}
+    </table>
+
 <a href="{% url 'social:password_change' %}">Change Password</a>
