@@ -75,9 +75,13 @@ WSGI_APPLICATION = 'sabzsocial.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "social_db",
+        "USER": "social_admin",
+        "PASSWORD": "samazolfi1385",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
