@@ -1,0 +1,16 @@
+    <form method="get" action="{% url 'social:search' %}">
+        {% csrf_token %}
+        <input type="text" name="query" required placeholder="Enter The Word ...">
+        <input type="submit" value="search">
+    </form>
+    <br>
+    {% if query %}
+        <h2>Results For {{ query }} : {{ posts.count }}</h2>
+    {% endif %}
+    <br>
+    {% for post in posts %}
+        <h4><a href="{{ post.get_absolute_url }}">{{ post.description | truncatewords:4 }}</a></h4>
+        <br>
+    {% empty %}
+        <p>No Result!</p>
+    {% endfor %}

@@ -8,6 +8,8 @@ from sabzsocial import settings
 from taggit.models import Tag
 from django.db.models import Count
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.contrib.postgres.search import SearchVector , SearchQuery , SearchRank , TrigramSimilarity
 # Create your views here.
 
 @login_required
@@ -159,3 +161,22 @@ def delete_post(request , post_id):
         post.delete()
         return redirect('social:profile')
     return render(request ,'forms/delete_post.html' , {'post' : post})
+
+def search(request):
+    query = None
+    posts = []
+    if 'query' in request.GET :
+        form = SearchForm(data = request.GET) 
+        if form.is_valid(): 
+            query = form.cleaned_data['query']
+            search_query = SearchQuery(query)
+            search_vetcor = SearchVector('description' , weight="A") + SearchVector('tags__name' , weight = "B")
+            posts = Post.objects.annotate(rank = SearchRank(search_vetcor , search_query) , 
+                                  similarity = TrigramSimilarity('description' , query) + TrigramSimilarity('tags__name' , query)).\
+            filter(Q(rank__gte = 0.1) | Q(similarity__gt = 0.3)).order_by('-rank' , '-similarity')
+    context = {
+        'query' : query ,
+        'posts' : posts
+    }
+    return render(request , 'social/search.html' , context)
+

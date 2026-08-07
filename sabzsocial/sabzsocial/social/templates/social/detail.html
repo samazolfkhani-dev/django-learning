@@ -1,3 +1,10 @@
+<form method="get" action="{% url 'social:search' %}">
+    {% csrf_token %}
+    <input type="text" name="query" required placeholder="Enter The Word ...">
+    <input type="submit" value="search">
+</form>
+<br>
+
 {% for img in images %}
     {% if img.image_file %}
         <img src="{{ img.image_file.url }}" alt="{{ img.title }}">

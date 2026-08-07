@@ -1,3 +1,9 @@
+<form method="get" action="{% url 'social:search' %}">
+    {% csrf_token %}
+    <input type="text" name="query" required placeholder="Enter The Word ...">
+    <input type="submit" value="search">
+</form>
+<br>
 {% if tag %}
     <h2>Posts Tagged With {{ tag.name }}</h2>
 {% endif %}

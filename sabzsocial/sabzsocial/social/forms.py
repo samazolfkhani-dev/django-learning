@@ -84,3 +84,6 @@ class CommentForm(forms.ModelForm):
             'body' : forms.Textarea(attrs={'placeholder' : 'Enter Your Comment :' , 'class' : 'comment_body'})
         }
 
+class SearchForm(forms.Form):
+    query = forms.CharField()
+
