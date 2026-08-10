@@ -20,6 +20,7 @@ class Post(models.Model):
     #date
     created =  models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(User , related_name="liked_posts" , blank=True)
     #tags
     tags = TaggableManager()
     
