@@ -8,6 +8,7 @@
     <h2>Posts Tagged With {{ tag.name }}</h2>
 {% endif %}
 
+<div id="post_list">
 {% for post in posts %}
     {% for img in post.images.all %}
         {% if img.image_file %}
@@ -26,5 +27,29 @@
     <br>
     <hr>
 {% endfor %}
+
+</div>
 <br>
-{% include "partials/pagination.html" with page=posts %}
+<button id="load-more">Load More</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var page = 2
+        $('#load-more').click(function(){
+            $.ajax({
+                type : 'GET',
+                url : "{% if tag %}{% url 'social:post_list_by_tag' tag.slug %}{% else %}{% url 'social:post_list' %}{% endif %}" + "?page=" + page ,
+                data: {
+                    page: page ,
+                    ajax: true
+                },
+                dataType : 'html' ,
+                success : function(data){
+                    $('#post_list').append(data);
+                    page += 1
+                }
+            });
+        });
+    });
+</script>

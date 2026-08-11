@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.postgres.search import SearchVector , SearchQuery , SearchRank , TrigramSimilarity
 from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 # Create your views here.
 
 @login_required
@@ -67,9 +68,16 @@ def post_list(request , tag_slug = None):
     if tag_slug :
         tag = get_object_or_404(Tag , slug = tag_slug)
         posts = Post.objects.filter(tags__in = [tag])
+    page = request.GET.get('page')
     paginator = Paginator(posts , 2)
-    page_number = request.GET.get('page' , 1)
-    posts = paginator.page(page_number)
+    try :
+        posts = paginator.page(page)
+    except PageNotAnInteger :
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = []
+    if request.GET.get('ajax') :
+        return render(request , 'social/list_ajax.html' , {'posts' : posts})
     context = {
         'posts' : posts ,
         'tag' : tag
