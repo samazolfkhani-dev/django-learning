@@ -2,6 +2,23 @@
 {% if user.photo %}
     <img src="{{ user.photo.url}}" width="250" height="250">
 {% endif %}
+    <h3>Saved Posts</h3>
+    <table style="width:50%; border-collapse: collapse;">
+        <tr>
+            <th style="border:2px solid orange;">Row</th>
+            <th style="border:2px solid orange;">Description</th>
+        </tr>
+
+        {% for post in user.saved_post.all %}
+        <tr>
+            <td style="border:2px solid orange;">{{ forloop.counter }}</td>
+            <td style="border:2px solid orange;">
+                <a href="{{ post.get_absolute_url }}">{{ post.description | truncatewords:4 }}</a>
+        </tr> 
+        {% endfor %}
+    </table>
+    <hr>
+
     <table style="width:50%; border-collapse: collapse;">
         <tr>
             <th style="border:2px solid orange;">Row</th>
