@@ -11,6 +11,8 @@ class User(AbstractUser):
     job = models.CharField(max_length=100, null=True, blank=True)
     phone = models.CharField(max_length=11, null=True, blank=True)
     photo = ResizedImageField(upload_to='accounts_images/', size = [500 , 500] , quality = 75 , crop = ['middle' , 'center'] , null=True, blank=True)
+    following = models.ManyToManyField('self' , through = 'Contact' , related_name = "followers" , symmetrical = False)
+
 
 class Post(models.Model):
     #relational
@@ -82,4 +84,19 @@ class Image(models.Model) :
 
     def __str__(self):
         return f"{self.title} : {self.description}"
+    
+
+class contact(models.Model):
+    user_from = models.ForeignKey(User , related_name = "rel_from_set" , on_delete = models.CASCADE)
+    user_to = models.ForeignKey(User , related_name = "rel_to_set" , on_delete = models.CASCADE)
+    created = models.DateField(auto_now_add = True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['-created'])
+        ]
+        ordering = ['-created']
+
+    def __str__(self):
+        return f"{self.user_from.username} Follows {self.user_to.username}."
 
