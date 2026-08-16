@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'taggit' ,
     'django.contrib.postgres',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -122,9 +123,13 @@ AUTH_USER_MODEL = 'social.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles')
 STATIC_URL = 'static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR , 'static') ,
+)
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/profile'
@@ -146,5 +151,3 @@ EMAIL_HOST_PASSWORD = 'raflbmhrzjtsmspi'
 
 TAGGIT_CASE_INSENSITIVE = True
 
-MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

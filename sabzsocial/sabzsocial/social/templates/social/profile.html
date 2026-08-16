@@ -1,6 +1,12 @@
+{% load thumbnail %}
+{% load static %}
 <h1>{{ user.username }} :</h1>
 {% if user.photo %}
-    <img src="{{ user.photo.url}}" width="250" height="250">
+    <a href = "{{ user.photo.url }}">
+        <img src="{% thumbnail user.photo 200x0 quality=80 %}">
+    </a>
+{% else %}
+    <img src="{% static 'profiles/images.jpg' %}">
 {% endif %}
     <h3>Saved Posts</h3>
     <table style="width:50%; border-collapse: collapse;">
@@ -13,7 +19,7 @@
         <tr>
             <td style="border:2px solid orange;">{{ forloop.counter }}</td>
             <td style="border:2px solid orange;">
-                <a href="{{ post.get_absolute_url }}">{{ post.description | truncatewords:4 }}</a>
+                <a href="{{ post.get_absolute_url }}">{{ post.description | truncatewords:4 }}</a></td>
         </tr> 
         {% endfor %}
     </table>

@@ -28,5 +28,6 @@ urlpatterns = [
     path('delete_post/<post_id>' , views.delete_post , name = 'delete_post') , 
     path('search/' , views.search , name = 'search') ,
     path('like_posts/' , views.like_post , name = 'like_post'),
-    path('saved_post' , views.saved_post , name = 'saved_post')
+    path('saved_post' , views.saved_post , name = 'saved_post') ,
+    path('users/' , views.user_list , name = 'user_list') ,
 ]
