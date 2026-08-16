@@ -12,7 +12,8 @@ class User(AbstractUser):
     phone = models.CharField(max_length=11, null=True, blank=True)
     photo = ResizedImageField(upload_to='accounts_images/', size = [500 , 500] , quality = 75 , crop = ['middle' , 'center'] , null=True, blank=True)
     following = models.ManyToManyField('self' , through = 'Contact' , related_name = "followers" , symmetrical = False)
-
+    def get_absolute_url(self):
+        return reverse('social:user_detail' , args=[self.username])
 
 class Post(models.Model):
     #relational

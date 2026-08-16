@@ -1,0 +1,24 @@
+{% load thumbnail %}
+{% load static %}
+
+{% if user.photo %}
+    <img src="{% thumbnail user.photo 150x0 quality=90 %}">
+{% else %}
+    <img src="{% static 'profiles/images.jpg' %}" width="150">
+{% endif %}
+<br>
+<br>
+Name : {{ user.get_full_name }}
+<br>
+Data Of Birth : {{ user.date_of_birth }}
+<br>
+Biography : {{ user.bio }}
+<br>
+Job : {{ user.job }}
+<br>
+<br>
+{% with total_followes=user.followers.count total_following=user.following.count %}
+    {{ total_followes }} Follower{{ total_followes|pluralize }}
+    <br>
+    {{ total_following }} Following{{ total_following | pluralize }}
+{% endwith %}
