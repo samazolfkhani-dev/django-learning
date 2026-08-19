@@ -241,3 +241,24 @@ def user_detail(request , username) :
     user = get_object_or_404(User , username = username , is_active = True)
     return render(request , 'user/user_detail.html' , {'user' : user})
 
+@login_required
+@require_POST
+def follow(request):
+    user_id = request.POST.get('id')
+    if user_id :
+        try :
+            user = get_object_or_404(User , id = user_id)
+            if request.user in user.followers.all() :
+                Contact.objects.filter(user_from = request.user , user_to = user).delete()
+                follow = False
+            else :
+                Contact.objects.get_or_create(user_from = request.user , user_to = user)
+                follow = True
+            followers = user.followers.count()
+            followings = user.following.count()
+            return JsonResponse({'follow' : follow , 'followers' : followers , 'followings' : followings})
+        except User.DoesNotExist :
+            return JsonResponse({'error' : 'User Does Not Exist!'})
+    return JsonResponse({'error' : 'Invalid Request!'})
+
+

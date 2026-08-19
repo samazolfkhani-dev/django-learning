@@ -87,7 +87,7 @@ class Image(models.Model) :
         return f"{self.title} : {self.description}"
     
 
-class contact(models.Model):
+class Contact(models.Model):
     user_from = models.ForeignKey(User , related_name = "rel_from_set" , on_delete = models.CASCADE)
     user_to = models.ForeignKey(User , related_name = "rel_to_set" , on_delete = models.CASCADE)
     created = models.DateField(auto_now_add = True)

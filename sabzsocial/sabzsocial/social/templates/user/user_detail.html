@@ -16,9 +16,53 @@ Biography : {{ user.bio }}
 <br>
 Job : {{ user.job }}
 <br>
+{% if request.user == user %}
+    <button disable>
+        {% if request.user in user.followers.all %}
+            Unfollow
+        {% else %}
+            Follow
+        {% endif %}
+    </button>
+{% else %}
+    <button id="follow-button">
+        {% if request.user in user.followers.all %}
+            Unfollow
+        {% else %}
+            Follow
+        {% endif %}
+    </button>
+{% endif %}
 <br>
 {% with total_followes=user.followers.count total_following=user.following.count %}
-    {{ total_followes }} Follower{{ total_followes|pluralize }}
+    <span class="follower">{{ total_followes }} Follower{{ total_followes|pluralize }}</span>
     <br>
-    {{ total_following }} Following{{ total_following | pluralize }}
+    <span class="following">{{ total_following }} Following{{ total_following | pluralize }}</span>
 {% endwith %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#follow-button').click(function(){
+            var button = $(this);
+            $.ajax({
+                type : 'POST',
+                url : "{% url 'social:follow' %}",
+                data: {
+                    'id' : "{{ user.id }}" ,
+                    'csrfmiddlewaretoken' : "{{ csrf_token }}",
+                },
+                success : function(data){
+                    if(data.follow){
+                        button.text('Unfollow');
+                    }
+                    else {
+                        button.text('Follow');
+                    }
+                    $('.follower').text(data.followers + 'Follower{{ total_followes|pluralize }}') ,
+                    $('.following').text(data.followings + 'Following{{ total_following | pluralize }}')
+                } ,
+            });
+        });
+    });
+</script>
