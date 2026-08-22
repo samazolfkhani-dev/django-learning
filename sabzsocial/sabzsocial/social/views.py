@@ -16,7 +16,7 @@ from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 
 @login_required
 def profile(request):
-    user = get_object_or_404(User , pk= request.user.id)
+    user = User.objects.prefetch_related('followers').get(id=request.user.id)
     return render(request , 'social/profile.html' , {'user' : user})
 
 def log_out(request):
@@ -63,7 +63,7 @@ def ticket(request):
     return render(request,'forms/ticket.html',{'form': form,'sent': sent})
 
 def post_list(request , tag_slug = None):
-    posts = Post.objects.all()
+    posts = Post.objects.select_related('author').order_by('-total_likes')
     tag = None
     if tag_slug :
         tag = get_object_or_404(Tag , slug = tag_slug)

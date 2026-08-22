@@ -27,12 +27,14 @@ class Post(models.Model):
     tags = TaggableManager()
 
     likes = models.ManyToManyField(User , related_name="liked_posts" , blank=True)
-    saved_by = models.ManyToManyField(User , related_name = "saved_post" , null = True)
+    saved_by = models.ManyToManyField(User , related_name = "saved_post" , null = True , blank = True)
+    total_likes = models.PositiveIntegerField(default = 0)
     
     class Meta:
         ordering = ['-created']
         indexes = [
-            models.Index(fields=['-created'])
+            models.Index(fields=['-created']) ,
+            models.Index(fields=['-total_likes'])
         ]
 
     def __str__(self):
