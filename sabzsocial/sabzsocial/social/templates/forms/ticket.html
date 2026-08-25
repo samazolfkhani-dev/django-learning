@@ -1,6 +1,8 @@
     <form method="post">
-        {% if sent %}
-            <h2>Your Ticket Was Successfully Sent To Supporters</h2>
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
         {% endif %}
         {% csrf_token %}
          Name :
