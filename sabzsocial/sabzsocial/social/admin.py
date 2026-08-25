@@ -14,11 +14,21 @@ class UserAdmin(UserAdmin):
 class ImageInline(admin.TabularInline) :
     model = Image
     extra = 1
-    readonly_fields = ['title' , 'description' , 'image_file']
+
+
+def make_deactivation(modeladmin , request , queryset):
+    result = queryset.update(active = False)
+    modeladmin.message_user(request , f"{result} Post Were Rejected!")
+make_deactivation.short_description = "Reject"
+
+def make_activation(modeladmin , request , queryset):
+    result = queryset.update(active = True)
+    modeladmin.message_user(request , f"{result} Post Were Accepted!")
+make_activation.short_description = "Accept"
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['author' , 'created' , 'tag_list']
+    list_display = ['author' , 'created' , 'tag_list' , 'description']
     ordering = ['created']
     list_filter = ['author' , 'created' ]
     search_fields = ['description']
@@ -26,6 +36,7 @@ class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
     list_display_links = ['author']
     inlines = [ImageInline]
+    actions = [make_deactivation , make_activation]
 
     def get_queryset(self , request):
         return super().get_queryset(request).prefetch_related('tags')
@@ -40,3 +51,5 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['active']
     list_editable = ['active']
     list_display_links = ['post' , 'user']
+
+

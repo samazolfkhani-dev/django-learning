@@ -12,6 +12,7 @@ from django.db.models import Q
 from django.contrib.postgres.search import SearchVector , SearchQuery , SearchRank , TrigramSimilarity
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
+from django.contrib import messages
 # Create your views here.
 
 @login_required
@@ -57,17 +58,17 @@ def ticket(request):
             cd = form.cleaned_data
             message = f"{cd['name']}\n{cd['email']}\n\n{cd['message']}"
             send_mail(cd['subject'],message,'samazolfkhani12@gmail.com',['samazolfkhani12@gmail.com'] , fail_silently=False)
-            sent = True
+            messages.success(request , 'Sent Successfuly!')
     else:
         form = TicketForm()
     return render(request,'forms/ticket.html',{'form': form,'sent': sent})
 
 def post_list(request , tag_slug = None):
-    posts = Post.objects.select_related('author').order_by('-total_likes')
+    posts = Post.objects.select_related('author').order_by('-total_likes' , '-id')
     tag = None
     if tag_slug :
         tag = get_object_or_404(Tag , slug = tag_slug)
-        posts = Post.objects.filter(tags__in = [tag])
+        posts = posts.filter(tags__in = [tag]).distinct()
     page = request.GET.get('page')
     paginator = Paginator(posts , 2)
     try :
