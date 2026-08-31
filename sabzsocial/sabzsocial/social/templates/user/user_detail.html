@@ -35,9 +35,9 @@ Job : {{ user.job }}
 {% endif %}
 <br>
 {% with total_followes=user.followers.count total_following=user.following.count %}
-    <span class="follower">{{ total_followes }} Follower{{ total_followes|pluralize }}</span>
+    <span class="follower"><a href="{% url 'social:follow_list' user.username 'followers' %}">{{ total_followes }} Follower{{ total_followes|pluralize }}</a></span>
     <br>
-    <span class="following">{{ total_following }} Following{{ total_following | pluralize }}</span>
+    <span class="following"><a href="{% url 'social:follow_list' user.username 'followings' %}">{{ total_following }} Following{{ total_following | pluralize }}</a></span>
 {% endwith %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -52,16 +52,21 @@ Job : {{ user.job }}
                     'id' : "{{ user.id }}" ,
                     'csrfmiddlewaretoken' : "{{ csrf_token }}",
                 },
-                success : function(data){
-                    if(data.follow){
+                success: function(data) {
+                    if (data.follow) {
                         button.text('Unfollow');
-                    }
-                    else {
+                    } else {
                         button.text('Follow');
                     }
-                    $('.follower').text(data.followers + 'Follower{{ total_followes|pluralize }}') ,
-                    $('.following').text(data.followings + 'Following{{ total_following | pluralize }}')
-                } ,
+
+                    $('.follower a').text(
+                        data.followers + ' Follower' + (data.followers !== 1 ? 's' : '')
+                    );
+
+                    $('.following a').text(
+                        data.followings + ' Following' + (data.followings !== 1 ? 's' : '')
+                    );
+                }
             });
         });
     });

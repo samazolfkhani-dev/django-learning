@@ -31,5 +31,6 @@ urlpatterns = [
     path('saved_post' , views.saved_post , name = 'saved_post') ,
     path('users/' , views.user_list , name = 'user_list') ,
     path('users/<username>' , views.user_detail , name = 'user_detail') ,
-    path('follow' , views.follow , name = 'follow')
+    path('follow' , views.follow , name = 'follow') ,
+    path('user_list/<username>/<str:label>' , views.user_follower_following , name = 'follow_list')
 ]

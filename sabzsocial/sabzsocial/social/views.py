@@ -262,4 +262,13 @@ def follow(request):
             return JsonResponse({'error' : 'User Does Not Exist!'})
     return JsonResponse({'error' : 'Invalid Request!'})
 
+@login_required
+def user_follower_following (request , username , label) :
+    user = get_object_or_404(User , username = username)
+    if label == 'followers' : 
+        users = User.objects.filter(rel_to_set__user_from = user)
+    else :
+        users = User.objects.filter(rel_from_set__user_to = user)
+    return render(request , 'user/user_list.html' , {'users' : users}) 
+
 
