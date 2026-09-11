@@ -33,6 +33,8 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now = True)
     weight = models.PositiveIntegerField(default = 0)
 
+
+
     class Meta:
         ordering = ['-created']
         indexes = [
