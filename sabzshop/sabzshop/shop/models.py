@@ -31,6 +31,7 @@ class Product(models.Model):
     new_price = models.PositiveIntegerField(default = 0)
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
+    weight = models.PositiveIntegerField(default = 0)
 
     class Meta:
         ordering = ['-created']
