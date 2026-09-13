@@ -10,4 +10,30 @@
     <p>Description : {{ product.description }}</p>
     <p>Price : {{ product.price }}</p>
     <p>New Price : {{ product.new_price }}</p>
+    <br>
+    <button type="button" id="add-cart">Add to Cart</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#add-cart').click(function(){
+                var button = $(this);
+
+                $.ajax({
+                    type : 'POST',
+                    url : "{% url 'cart:add_to_cart' product.id %}" ,
+                    data : {'csrfmiddlewaretoken' : '{{ csrf_token }}'} ,
+
+                    success:function(data){
+                        $('.item_count').text(data.item_count + 'items | ');
+                        $('.total_price').text(data.total_price + ' $');
+                    } ,
+
+                    error: function(error){
+                        console.log(error)
+                    },
+                });
+            });
+        });
+    </script>
 {% endblock %}
