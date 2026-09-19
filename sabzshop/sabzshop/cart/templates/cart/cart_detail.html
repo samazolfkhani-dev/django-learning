@@ -1,0 +1,146 @@
+{% extends 'parent/base.html' %}
+{% block title %} Cart{% endblock %}
+
+{% block content %}
+
+    {% for item in cart %}
+        <div class="product-item" data-item-id="{{ item.product.id }}">
+
+            <a href="{% url 'shop:product_detail' item.product.id item.product.slug %}">
+                <img src="{{ item.product.first.file.url }}">
+            </a>
+
+            <h3>
+                <a href="{% url 'shop:product_detail' item.product.id item.product.slug %}">
+                    <p>Product Name : {{ item.product.name }}</p>
+                </a>
+            </h3>
+
+            <p>
+                Quantity :
+                <span id="item-quantity-{{ item.product.id }}">
+                    {{ item.quantity }}
+                </span>
+            </p>
+
+            <p>
+                Price :
+                <span id="item-price-{{ item.product.id }}">
+                    {{ item.price }}
+                </span>
+            </p>
+
+            <p>
+                Total Price :
+                <span id="item-total-{{ item.product.id }}">
+                    {{ item.total }}
+                </span>
+            </p>
+
+            <button class="quantity-add">+</button>
+            <button class="quantity-decrease">-</button>
+            <button class="product-remove">remove</button>
+
+        </div>
+{% endfor %}
+    <div class="total-price">
+        <p>Total Price : <span id="item-total_price"> {{ cart.get_total_price }} </span></p>
+        <p>Post Price : <span id="item-post_price"> {{ cart.get_post_price }} </span></p>
+        <p>Final Price : <span id="item-final_price"> {{ cart.get_final_price }} </span></p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+        $(document).ready(function(){
+
+    $('.quantity-add').on('click', function(){
+        updatequantity(
+            $(this).closest('.product-item').data('item-id'),
+            'add'
+        );
+    });
+
+    $('.quantity-decrease').on('click', function(){
+        updatequantity(
+            $(this).closest('.product-item').data('item-id'),
+            'decrease'
+        );
+    });
+
+    $('.product-remove').on('click' , function(){
+        removeitem(
+            $(this).closest('.product-item').data('item-id')
+        );
+    })
+
+
+    function updatequantity(item_id, action){
+
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'cart:update_quantity' %}",
+
+            data: {
+                'item_id': item_id,
+                'action': action,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+
+            success: function(response){
+
+                if(response.success){
+
+                    $('#item_count').text(response.item_count);
+
+                    $('#item-quantity-' + item_id).text(response.quantity);
+
+                    $('#item-total-' + item_id).text(response.total);
+
+                    $('#item-total_price').text(response.total_price);
+
+                    $('#item-post_price').text(response.post_price);
+
+                    $('#item-final_price').text(response.final_price);
+
+                } else {
+
+                    alert(response.error);
+
+                }
+            },
+
+            error: function(){
+
+                alert('Error Updating Quantity!');
+
+            }
+        });
+    }
+
+    function removeitem(item_id){
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'cart:remove_item' %}",
+            data: {
+                'item_id': item_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+
+            success: function(data){
+                if(data.success){
+                    $('#item-total_price').text(data.total_price);
+                    $('#item-post_price').text(data.post_price);
+                    $('#item-final_price').text(data.final_price);
+                    $(`.product-item[data-item-id="${item_id}"]`).remove();
+                } else {
+                    alert(data.error);
+                }
+            } ,
+
+            error: function(data){
+                alert('Eror Updating Quantity!');
+            }
+        });
+    }
+});
+    </script>
+{% endblock %}
